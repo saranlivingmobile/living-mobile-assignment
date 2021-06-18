@@ -2,6 +2,12 @@ import { Body, Controller, Get, Post , Put , Delete , Param } from '@nestjs/comm
 import { StoreService } from './store.service';
 import { CreateStoreDto } from './dto/createStore.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import {
+    ApiCreatedResponse,
+    ApiOkResponse,
+} from '@nestjs/swagger';
+import { plainToClass } from 'class-transformer';
+import { StoreDto } from './dto/store.dto';
 
 @Controller('store')
 export class StoreController {
@@ -9,14 +15,28 @@ export class StoreController {
 
     @Post()
     @ApiOperation({ summary: 'Create store' })
-    create(@Body() createStoreDto: CreateStoreDto) {
-        return this.storeService.create(createStoreDto);
+    @ApiCreatedResponse({ // HTTP 201
+        description: 'The store has been successfully created.',
+        type: StoreDto,
+    })
+    async create(@Body() createStoreDto: CreateStoreDto) {
+        const store = await this.storeService.create(createStoreDto);
+        // this will map Store model value to StoreDto model value.
+        return plainToClass(StoreDto, store, { excludeExtraneousValues: true });
     }
 
     @Get()
     @ApiOperation({ summary: 'Find all store' })
-    findAll() {
-        return this.storeService.findAll();
+    @ApiOkResponse({ // HTTP 200
+        description: 'All of store',
+        isArray: true,
+        type: StoreDto,
+    })
+    async findAll() {
+        const store = await this.storeService.findAll();
+        return store.map((store) =>
+            plainToClass(StoreDto, store, { excludeExtraneousValues: true }),
+        );
     }
 
     @Get('/find/:id')
