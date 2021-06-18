@@ -1,4 +1,5 @@
-import { Column, Model, Table ,DataType } from 'sequelize-typescript';
+import { Column, Model, Table ,DataType, ForeignKey } from 'sequelize-typescript';
+import { CategoryModel } from 'src/category/category.model';
 
 @Table({
     tableName: 'menu',
@@ -13,6 +14,7 @@ export class MenuModel extends Model {
     id: string;
 
     @Column
+    @ForeignKey(()=> CategoryModel)
     categoryId: string;
 
     @Column
