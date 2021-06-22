@@ -1,5 +1,5 @@
 import { Column, Model, Table , DataType, ForeignKey } from 'sequelize-typescript';
-import { StoreModel } from 'src/store/store.model';
+import { StoreModel } from '../store/store.model';
 
 @Table({
     tableName: 'category',
