@@ -2,6 +2,12 @@ import { Body, Controller, Get, Post , Put , Delete , Param} from '@nestjs/commo
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/createCategory.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import {
+    ApiCreatedResponse,
+    ApiOkResponse,
+} from '@nestjs/swagger';
+import { plainToClass } from 'class-transformer';
+import { CategoryDto } from './dto/category.dto';
 
 @Controller('category')
 export class CategoryController {
@@ -9,14 +15,28 @@ export class CategoryController {
 
     @Post()
     @ApiOperation({ summary: 'Create Category' })
-    create(@Body() createCategoryDto: CreateCategoryDto) {
-        return this.categoryService.create(createCategoryDto);
+    @ApiCreatedResponse({ // HTTP 201
+        description: 'The category has been successfully created.',
+        type: CategoryDto,
+    })
+    async create(@Body() createCategoryDto: CreateCategoryDto) {
+        const category = await this.categoryService.create(createCategoryDto);
+        // this will map User model value to UserDto model value.
+        return plainToClass(CategoryDto, category, { excludeExtraneousValues: true });
     }
 
     @Get()
     @ApiOperation({ summary: 'Find all category' })
-    findAll() {
-        return this.categoryService.findAll();
+    @ApiOkResponse({ // HTTP 200
+        description: 'All of category',
+        isArray: true,
+        type: CategoryDto,
+    })
+    async findAll() {
+        const category = await this.categoryService.findAll();
+        return category.map((category) =>
+            plainToClass(CategoryDto, category, { excludeExtraneousValues: true }),
+        );
     }
 
     @Get('/find/:id')
