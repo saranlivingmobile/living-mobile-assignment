@@ -23,6 +23,6 @@ export class CategoryModel extends Model {
     @ForeignKey(()=> StoreModel)
     storeId: string;
 
-    @HasMany(()=>MenuModel)
-    menuId : MenuModel[];
+    // @HasMany(()=>MenuModel)
+    // menuId : MenuModel[];
 }

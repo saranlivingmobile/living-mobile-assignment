@@ -22,7 +22,7 @@ export class StoreModel extends Model {
     @Column
     rating : number;
     
-    @HasMany(()=>CategoryModel)
-    categoryId : CategoryModel[]
+    // @HasMany(()=>CategoryModel)
+    // categoryId : CategoryModel[]
     
 }
