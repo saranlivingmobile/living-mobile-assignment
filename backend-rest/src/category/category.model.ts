@@ -1,4 +1,5 @@
-import { Column, Model, Table , DataType, ForeignKey } from 'sequelize-typescript';
+import { Column, Model, Table , DataType, ForeignKey, HasMany } from 'sequelize-typescript';
+import { MenuModel } from '../menu/menu.model';
 import { StoreModel } from '../store/store.model';
 
 @Table({
